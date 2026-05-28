@@ -407,6 +407,24 @@ class GitHubCommitTracker {
       });
     }
 
+    // English diff (optional best-effort)
+    if (englishDiff && (englishDiff.compareUrl || englishDiff.patchSnippet)) {
+      body += `### 🧩 Recent English Diff\n\n`;
+      if (englishDiff.compareUrl) {
+        body += `- [🔍 View full compare](${englishDiff.compareUrl})\n\n`;
+      }
+      if (englishDiff.patchSnippet) {
+        body += `<details>\n<summary>Show patch snippet</summary>\n\n`;
+        body += `\`\`\`diff\n${englishDiff.patchSnippet}\n\`\`\`\n\n`;
+        if (englishDiff.isTruncated) {
+          body += `_(Patch snippet truncated. Use the compare link above for the full diff.)_\n\n`;
+        }
+        body += `</details>\n\n`;
+      } else {
+        body += `_(No patch snippet available for this change. Use the compare link above.)_\n\n`;
+      }
+    }
+
     body += `### 🔗 Quick Links
 - [📄 Current English file](https://github.com/${this.owner}/${this.repo}/blob/${this.currentBranch}/${englishFile})
 
